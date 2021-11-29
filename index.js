@@ -5,7 +5,11 @@ const routes = require('./routes')
 const path = require('path')
 //helpeers con meytodos de ayuda general 
 const helpers = require('./helpers')
+//importar libreria de alertas
+const flash = require('connect-flash')
 
+const session = require('express-session')
+const cookieParser = require('cookie-parser')
 
 //crando conexion a la base de dtaos
 const db = require('./config/db')
@@ -13,6 +17,7 @@ const db = require('./config/db')
 //recuerda importar el modelo para poder crear la tabla
 require('./models/Proyectos')
 require('./models/Tareas')
+require('./models/Usuarios')
 db.sync()
     .then(()=>{console.log('conectado al server')})
     .catch(error => {console.log(error)})
@@ -21,24 +26,38 @@ db.sync()
 //creando app de express
 const app = express();
 
-
-//Habilitar datos de body
-app.use(express.json())
-app.use(express.urlencoded({extended: true  }));
-
 //agregamos la carpeta donde cargara los archivos estaticos (css,js)
 app.use(express.static('public'))
 
 //Habilitamos el view enginne en express PUG()
 app.set('view engine', 'pug')
+
+
+//Habilitar datos de body
+app.use(express.json())
+app.use(express.urlencoded({extended: true  }));
+
+
 //agregamos la carpeta de las vistas
 app.set('views',path.join(__dirname,'./views'))
 
-//Pasar el var dump para qeu este disponible en toda la aplicaicon , esto es un middelware
+//agregamos flash menssages
+app.use(flash())
 
+app.use(cookieParser());
+
+//sesiones npos permite navegar entre distitas paginas sin la necesidad de autenticarse de nuevok
+app.use(session({
+    secret:'supersecreto',
+    resave:false,
+    saveUninitialized:false //lo que hace esto es que mantiene la sesion activa aaunque el usuairo no este haviendo nada
+}))
+
+//Pasar el var dump para qeu este disponible en toda la aplicaicon , esto es un middelware
  app.use((req, res, next) => {
      res.locals.year = new Date();
     res.locals.vardump = helpers.vardump;
+    res.locals.mensajes = req.flash();
     next();
 })
 

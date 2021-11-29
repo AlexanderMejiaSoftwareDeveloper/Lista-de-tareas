@@ -4,6 +4,7 @@ const router = express.Router();
 //importamos controlador 
 const proyectoController = require('../controllers/proyectoController')
 const tareasController = require('../controllers/tareasController')
+const usuariosController = require('../controllers/usuariosController')
 //importado express validator para validacion
 const { body } = require('express-validator')
 
@@ -33,6 +34,11 @@ module.exports = () => {
     router.post('/proyectos/:url', tareasController.agregarTarea)
     //patch cambia solo un parte mientras que update reescribe todo el elemento
     router.patch('/tareas/:id', tareasController.cambiarEstadoTarea)
+    router.delete('/tareas/:id', tareasController.eliminarTarea)
+
+    //Crear nueva cuenta 
+    router.get('/crear-cuenta', usuariosController.formCrearCuenta)
+    router.post('/crear-cuenta',usuariosController.crearCuenta)
 
     return router;
 }

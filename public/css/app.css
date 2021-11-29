@@ -223,11 +223,15 @@ body.index {
     font-size: 1.4rem;
     border-bottom: 1px solid #d1d1d1;
 }
+.listgrow{
+    flex-grow: 1;
+}
 .listado-pendientes ul li:last-of-type {
     border-bottom: none;
 }
 .listado-pendientes ul li i {
     cursor: pointer;
+    margin-right: 15px;
 }
 .acciones i:last-child{
     margin-left: 3rem;

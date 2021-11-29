@@ -22,7 +22,7 @@ block contenido
                 if tareas.length
                     each tarea in tareas
                         li.tarea(data-tarea=tarea.id)
-                            p= tarea.tarea
+                            p.listgrow= tarea.tarea
                             .acciones 
                             if tarea.estado 
                                 i.far.fa-check-circle.completo 
@@ -30,7 +30,15 @@ block contenido
                                 i.far.fa-check-circle         
                             i.fas.fa-trash     
                 else 
-                    p No hay tareas en este Proyecto        
+                    p No hay tareas en este Proyecto  
+        
+        //Avance del proyecto
+        
+        .avance
+            h2 Avance del proyecto 
+            #barra-avance.barra-avance
+                #porcentaje.porcentaje
+
         //Acciones que se pueden realizar
         .contenedor-acciones 
             a(href=`/proyecto/editar/${proyecto.id}` class="boton") Editar Proyecto
