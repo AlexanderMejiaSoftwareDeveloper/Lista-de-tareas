@@ -7,6 +7,8 @@ const path = require('path')
 const helpers = require('./helpers')
 //importar libreria de alertas
 const flash = require('connect-flash')
+//importamos passport
+const passport = require('./config/passport')
 
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
@@ -52,6 +54,9 @@ app.use(session({
     resave:false,
     saveUninitialized:false //lo que hace esto es que mantiene la sesion activa aaunque el usuairo no este haviendo nada
 }))
+
+app.use(passport.initialize());
+app.use(passport.session())
 
 //Pasar el var dump para qeu este disponible en toda la aplicaicon , esto es un middelware
  app.use((req, res, next) => {

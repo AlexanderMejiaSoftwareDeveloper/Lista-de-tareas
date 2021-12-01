@@ -46,6 +46,11 @@ const Usuarios = db.define("usuarios", {
 
 });
 
-Usuarios.hasMany(Proyectos)//Relacion la tabla de proyectos
+//Metodos personalizados //Prototype nos permite que todos os objetosque se creen con usuario cuente con la funcion designada
+Usuarios.prototype.verificarPassword = function (password) {
+    return bcrypt.compareSync(password,this.password)//Con esta uncion comparamos el password que ingresa con el password hasheado en la base 
+}
+
+//Usuarios.hasMany(Proyectos)//Relacion la tabla de proyectos
 
 module.exports = Usuarios;
