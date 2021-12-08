@@ -12,12 +12,15 @@ passport.use(
             usernameField: 'email',
             passwordField: 'password'
         },
-        async (email, password, done) => {
+        async(email, password, done) => {
             try {
                 const usuario = await Usuarios.findOne({
-                    where: { email: email }
-                })
-                //Usuario existe pero clave incorrecta
+                        where: {
+                            email,
+                            activo: 1
+                        }
+                    })
+                    //Usuario existe pero clave incorrecta
                 if (!usuario.verificarPassword(password)) {
                     return done(null, false, {
                         message: 'Password incorrecto '

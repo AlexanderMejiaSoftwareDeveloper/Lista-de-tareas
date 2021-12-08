@@ -7,7 +7,11 @@ const slug = require('slug')
 
 //con exports podemos varios de los mismo
 exports.proyectosHome = async (req, res) => {
-    const proyectos = await Proyectos.findAll()
+
+    //obetener info del user que la defeinomos en el index como locals
+    const usuarioId = res.locals.usuario.id;
+
+    const proyectos = await Proyectos.findAll({ where: { usuarioId } })
 
     //rebder nos permite mandar una vista // json un objeto y send igual
     res.render('index', {
@@ -17,7 +21,11 @@ exports.proyectosHome = async (req, res) => {
 };
 
 exports.formularioProyecto = async (req, res) => {
-    const proyectos = await Proyectos.findAll()
+
+    //obetener info del user que la defeinomos en el index como locals
+    const usuarioId = res.locals.usuario.id;
+
+    const proyectos = await Proyectos.findAll({ where: { usuarioId } })
 
     res.render('nuevoProyecto', {
         nombrePagina: "Nuevo Proyecto",
@@ -45,7 +53,9 @@ exports.nuevoProyecto = async (req, res) => {
         //no hay errores
         //insertar datos
 
-        const proyecto = await Proyectos.create({ nombre });
+        //obtenemos el valor del id del usuario ||| para guardar en base de datos 
+        const usuarioId = res.locals.usuario.id
+        await Proyectos.create({ nombre, usuarioId });
         res.redirect('/')
 
     }
@@ -53,8 +63,11 @@ exports.nuevoProyecto = async (req, res) => {
 }
 
 exports.proyectoPorUrl = async (req, res, next) => {
+
+    //obetener info del user que la defeinomos en el index como locals
+    const usuarioId = res.locals.usuario.id;
     //pasamos proyectoss
-    const proyectosPromise = Proyectos.findAll()
+    const proyectosPromise = Proyectos.findAll({ where: { usuarioId } })
 
     //res.send(req.params.url)//asi accedemos al comidin que designamos en el router
     const proyectoPromise = Proyectos.findOne({
@@ -66,10 +79,10 @@ exports.proyectoPorUrl = async (req, res, next) => {
     // Cuando una consulta no depende la otro es mejor usar promesas 
 
     const [proyectos, proyecto] = await Promise.all([proyectosPromise, proyectoPromise]);
-   
+
     //Consultar tareas del proyecto actual
     const tareas = await Tareas.findAll(({
-        where:{
+        where: {
             proyectoId: proyecto.id
         },
         // Este include seria el igual a un join en sql, solo pasariamos el modelo
@@ -96,8 +109,10 @@ exports.proyectoPorUrl = async (req, res, next) => {
 
 exports.fomularioEditar = async (req, res) => {
 
+    //obetener info del user que la defeinomos en el index como locals
+    const usuarioId = res.locals.usuario.id;
     //pasamos proyectoss
-    const proyectosPromise = Proyectos.findAll()
+    const proyectosPromise = Proyectos.findAll({where:{usuarioId}})
 
     //consolta del proyecto para autollenar campos 
 
@@ -140,26 +155,26 @@ exports.actualizarProyecto = async (req, res) => {
 
         await Proyectos.update(
             { nombre: nombre },
-            { where: {id:req.params.id} }
-            );
+            { where: { id: req.params.id } }
+        );
         res.redirect('/')
 
     }
 
 }
 
-exports.eliminarProyecto = async (req,res, next) => {
-   //req: tiene la informacion y s piuede optener cpn params o query
+exports.eliminarProyecto = async (req, res, next) => {
+    //req: tiene la informacion y s piuede optener cpn params o query
     console.log(req.query)
-    const {urlProyecto} = req.query;
+    const { urlProyecto } = req.query;
 
-    const resultado =  await Proyectos.destroy({where: {url: urlProyecto}})
-    
+    const resultado = await Proyectos.destroy({ where: { url: urlProyecto } })
+
     //manejando posible error de caida de servidor o base de datos
-    if(!resultado){
+    if (!resultado) {
         return next();
     }
-    
+
     res.send('Proyecto Eliminado Correctamente')
 }
 

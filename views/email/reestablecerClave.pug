@@ -1,0 +1,16 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        style 
+            include ./email.css
+            
+
+    body 
+        h2 Reestablecer Clave 
+        p Hola, has solicitado reestablecer tu clave, haz click en el siguente enlace para continuar, este enlace es temporal asi que si vence splicitalo de nuevo 
+        a(href=`${resetUrl}`) Ir a resetear clave 
+        p Si no puedes acceder a ese enlace accede, visita #{resetUrl}
+        p Si no solicitaste este e-mail puedes ignorarlo 
