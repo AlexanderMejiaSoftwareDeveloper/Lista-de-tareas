@@ -12,6 +12,9 @@ const passport = require('./config/passport')
 
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
+//importanto variables de entorno 
+require('dotenv').config({ path: 'variables.env'})
+
 
 //crando conexion a la base de dtaos
 const db = require('./config/db')
@@ -73,5 +76,9 @@ app.use((req, res, next) => {
 //Asi utilizamos las rutas que separamos al otro archivo
 app.use('/', routes());
 
-//Puerto para que corra el servidor de express
-app.listen(3000);
+const host = process.env.HOST || '0.0.0.0'
+const port = process.env.PORT || 3000;
+
+app.listen(port,host, ()=>{
+    console.log('El servidor esta funcionando correctamente')
+})
