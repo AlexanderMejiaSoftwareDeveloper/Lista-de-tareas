@@ -4,9 +4,10 @@
   "description": "Es un proyecto de gestion de tareas",
   "main": "index.js",
   "scripts": {
+    "desarrollo": "concurrently \"npm run devStart\" \"npm run watch\" ",
     "test": "echo \"Error: no test specified\" && exit 1",
     "devStart": "nodemon ./index.js",
-    "start": "concurrently \"npm run devStart\" \"npm run watch\" ",
+    "start":"node ./index.js",
     "watch": "webpack -w --mode development"
   },
   "keywords": [
